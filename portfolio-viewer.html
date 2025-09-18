@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Viewer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #0f0f23;
+            --card-bg: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #6c6c6c;
+            --border-color: #2d2d44;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.15);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-20px) translateY(-10px); }
+            50% { transform: translateX(20px) translateY(10px); }
+            75% { transform: translateX(-10px) translateY(20px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-heavy);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .portfolio-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-heavy);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            min-height: 600px;
+        }
+
+        .portfolio-iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            background: white;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .success-message {
+            background: var(--success-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .portfolio-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .controls {
+                padding: 1.5rem;
+            }
+
+            .portfolio-iframe {
+                height: 600px;
+            }
+
+            .portfolio-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Portfolio Viewer</h1>
+            <p>View and manage your generated portfolios</p>
+        </div>
+
+        <div class="controls">
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <input type="number" id="userId" class="form-input" placeholder="Enter User ID (e.g., 1)" value="1">
+            </div>
+            <div class="form-group">
+                <label for="template">Template</label>
+                <select id="template" class="form-input">
+                    <option value="default">Default</option>
+                    <option value="developer">Developer</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="photographer">Photographer</option>
+                    <option value="video_editor">Video Editor</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="designer">Designer</option>
+                    <option value="writer">Writer</option>
+                    <option value="consultant">Consultant</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="loadPortfolio()">
+                <i class="fas fa-eye"></i> View Portfolio
+            </button>
+            <button class="btn btn-secondary" onclick="openForm()">
+                <i class="fas fa-plus"></i> Create New Portfolio
+            </button>
+        </div>
+
+        <div class="portfolio-container">
+            <div id="loadingState" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading portfolio...</p>
+            </div>
+
+            <div id="errorState" class="error-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p id="errorText">Error loading portfolio</p>
+            </div>
+
+            <div id="successState" class="success-message" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <p>Portfolio loaded successfully!</p>
+            </div>
+
+            <iframe id="portfolioFrame" class="portfolio-iframe" style="display: none;"></iframe>
+
+            <div id="portfolioActions" class="portfolio-actions" style="display: none;">
+                <a href="#" class="action-btn" onclick="downloadPortfolio()">
+                    <i class="fas fa-download"></i> Download HTML
+                </a>
+                <a href="#" class="action-btn" onclick="printPortfolio()">
+                    <i class="fas fa-print"></i> Print Portfolio
+                </a>
+                <a href="#" class="action-btn" onclick="sharePortfolio()">
+                    <i class="fas fa-share"></i> Share Portfolio
+                </a>
+                <a href="#" class="action-btn" onclick="editPortfolio()">
+                    <i class="fas fa-edit"></i> Edit Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPortfolioHtml = '';
+        const API_BASE = (window.location.protocol === 'file:')
+            ? 'http://localhost:8000/api/'
+            : new URL('api/', window.location.href).href;
+
+        async function loadPortfolio() {
+            const userId = document.getElementById('userId').value;
+            const template = document.getElementById('template').value;
+
+            if (!userId) {
+                showError('Please enter a User ID');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`${API_BASE}generate-portfolio`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: parseInt(userId),
+                        template: template
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentPortfolioHtml = result.html;
+                    displayPortfolio(result.html);
+                    showSuccess();
+                } else {
+                    showError(result.message || 'Failed to load portfolio');
+                }
+            } catch (error) {
+                showError('Error loading portfolio: ' + error.message);
+            }
+        }
+
+        function displayPortfolio(html) {
+            const iframe = document.getElementById('portfolioFrame');
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            iframe.src = url;
+            iframe.style.display = 'block';
+        }
+
+        function showLoading() {
+            hideAllStates();
+            document.getElementById('loadingState').style.display = 'flex';
+        }
+
+        function showError(message) {
+            hideAllStates();
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        function showSuccess() {
+            hideAllStates();
+            document.getElementById('successState').style.display = 'block';
+            document.getElementById('portfolioActions').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('successState').style.display = 'none';
+            }, 3000);
+        }
+
+        function hideAllStates() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('successState').style.display = 'none';
+            document.getElementById('portfolioFrame').style.display = 'none';
+            document.getElementById('portfolioActions').style.display = 'none';
+        }
+
+        function downloadPortfolio() {
+            if (!currentPortfolioHtml) {
+                alert('No portfolio to download');
+                return;
+            }
+
+            const blob = new Blob([currentPortfolioHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'portfolio.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function printPortfolio() {
+            if (!currentPortfolioHtml) {
+                alert('No portfolio to print');
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(currentPortfolioHtml);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function sharePortfolio() {
+            if (!currentPortfolioHtml) {
+                alert('No portfolio to share');
+                return;
+            }
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Portfolio',
+                    text: 'Check out my professional portfolio',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Portfolio link copied to clipboard!');
+                });
+            }
+        }
+
+        function editPortfolio() {
+            // Redirect to the form with the current user ID
+            const userId = document.getElementById('userId').value;
+            window.open(`premium-form.html?edit=${userId}`, '_blank');
+        }
+
+        function openForm() {
+            window.open('premium-form.html', '_blank');
+        }
+
+        // Load portfolio on page load if user ID is provided
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user');
+            if (userId) {
+                document.getElementById('userId').value = userId;
+                loadPortfolio();
+            }
+        });
+    </script>
+</body>
+</html>
+

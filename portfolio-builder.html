@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Portfolio Builder</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #4facfe;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            margin: 2rem auto;
+            max-width: 1200px;
+            overflow: hidden;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .header-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 3rem 2rem;
+        }
+
+        .profession-selector {
+            margin-bottom: 3rem;
+        }
+
+        .profession-card {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .profession-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .profession-card.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .profession-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .step.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #00f2fe 100%);
+            border: none;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .skill-tag .remove {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dynamic-item {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .remove-item {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .preview-section {
+            background: var(--light-color);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .preview-iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="header-section">
+                <h1><i class="fas fa-magic"></i> Professional Portfolio Builder</h1>
+                <p>Create stunning portfolios for any profession in minutes</p>
+            </div>
+
+            <div class="form-section">
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">1</div>
+                    <div class="step" data-step="2">2</div>
+                    <div class="step" data-step="3">3</div>
+                    <div class="step" data-step="4">4</div>
+                    <div class="step" data-step="5">5</div>
+                </div>
+
+                <!-- Alert Messages -->
+                <div id="alertContainer"></div>
+
+                <!-- Step 1: Profession Selection -->
+                <div class="form-step active" id="step1">
+                    <h2 class="text-center mb-4">Choose Your Profession</h2>
+                    <div class="row profession-selector">
+                        <div class="col-md-4">
+                            <div class="profession-card" data-profession="developer">
+                                <i class="fas fa-code"></i>
+                                <h4>Developer</h4>
+                                <p>Software Engineer, Web Developer, App Developer</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="profession-card" data-profession="doctor">
+                                <i class="fas fa-user-md"></i>
+                                <h4>Doctor</h4>
+                                <p>Medical Professional, Specialist, Surgeon</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="profession-card" data-profession="photographer">
+                                <i class="fas fa-camera"></i>
+                                <h4>Photographer</h4>
+                                <p>Portrait, Wedding, Commercial Photography</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="profession-card" data-profession="video_editor">
+                                <i class="fas fa-video"></i>
+                                <h4>Video Editor</h4>
+                                <p>Film Editor, Content Creator, Motion Graphics</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="profession-card" data-profession="marketing">
+                                <i class="fas fa-chart-line"></i>
+                                <h4>Marketing</h4>
+                                <p>Digital Marketing, Brand Manager, SEO Specialist</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="profession-card" data-profession="designer">
+                                <i class="fas fa-palette"></i>
+                                <h4>Designer</h4>
+                                <p>Graphic Designer, UI/UX Designer, Creative Director</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="profession-card" data-profession="writer">
+                                <i class="fas fa-pen-fancy"></i>
+                                <h4>Writer</h4>
+                                <p>Content Writer, Copywriter, Author</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="profession-card" data-profession="consultant">
+                                <i class="fas fa-briefcase"></i>
+                                <h4>Consultant</h4>
+                                <p>Business Consultant, Management Consultant</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" onclick="nextStep()" id="nextBtn1" disabled>
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Personal Information -->
+                <div class="form-step" id="step2">
+                    <h2 class="text-center mb-4">Personal Information</h2>
+                    <form id="personalForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="fullName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Professional Title</label>
+                                    <input type="text" class="form-control" id="jobTitle">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Location</label>
+                                    <input type="text" class="form-control" id="location">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Website/Portfolio</label>
+                                    <input type="url" class="form-control" id="website">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Professional Summary</label>
+                            <textarea class="form-control" id="summary" rows="4" placeholder="Tell us about yourself, your experience, and what makes you unique..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Profile Photo</label>
+                            <input type="file" class="form-control" id="profilePhoto" accept="image/*">
+                        </div>
+                    </form>
+                    <div class="text-center">
+                        <button class="btn btn-secondary me-3" onclick="prevStep()">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button class="btn btn-primary" onclick="nextStep()">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Skills & Experience -->
+                <div class="form-step" id="step3">
+                    <h2 class="text-center mb-4">Skills & Experience</h2>
+                    
+                    <!-- Skills Section -->
+                    <div class="mb-4">
+                        <h4>Skills</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label">Technical Skills</label>
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control" id="techSkillInput" placeholder="e.g., JavaScript, React">
+                                    <button class="btn btn-outline-primary" type="button" onclick="addSkill('technical')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div id="technicalSkills"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Soft Skills</label>
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control" id="softSkillInput" placeholder="e.g., Leadership, Communication">
+                                    <button class="btn btn-outline-primary" type="button" onclick="addSkill('soft')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div id="softSkills"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Tools & Technologies</label>
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control" id="toolSkillInput" placeholder="e.g., Git, Docker, AWS">
+                                    <button class="btn btn-outline-primary" type="button" onclick="addSkill('tools')">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div id="toolsSkills"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience Section -->
+                    <div class="mb-4">
+                        <h4>Professional Experience</h4>
+                        <div id="experienceContainer">
+                            <div class="dynamic-item">
+                                <button type="button" class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Job Title *</label>
+                                            <input type="text" class="form-control" name="expTitle" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Company *</label>
+                                            <input type="text" class="form-control" name="expCompany" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="month" class="form-control" name="expStart">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">End Date</label>
+                                            <input type="month" class="form-control" name="expEnd">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Description & Achievements</label>
+                                    <textarea class="form-control" name="expDescription" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" onclick="addExperience()">
+                            <i class="fas fa-plus"></i> Add Experience
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-secondary me-3" onclick="prevStep()">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button class="btn btn-primary" onclick="nextStep()">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Education & Projects -->
+                <div class="form-step" id="step4">
+                    <h2 class="text-center mb-4">Education & Projects</h2>
+                    
+                    <!-- Education Section -->
+                    <div class="mb-4">
+                        <h4>Education</h4>
+                        <div id="educationContainer">
+                            <div class="dynamic-item">
+                                <button type="button" class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Degree/Qualification *</label>
+                                            <input type="text" class="form-control" name="eduDegree" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Institution *</label>
+                                            <input type="text" class="form-control" name="eduInstitution" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="month" class="form-control" name="eduStart">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label">End Date</label>
+                                            <input type="month" class="form-control" name="eduEnd">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-label">Grade/GPA</label>
+                                            <input type="text" class="form-control" name="eduGrade">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Location</label>
+                                    <input type="text" class="form-control" name="eduLocation">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" onclick="addEducation()">
+                            <i class="fas fa-plus"></i> Add Education
+                        </button>
+                    </div>
+
+                    <!-- Projects Section -->
+                    <div class="mb-4">
+                        <h4>Projects & Portfolio</h4>
+                        <div id="projectsContainer">
+                            <div class="dynamic-item">
+                                <button type="button" class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Project Name *</label>
+                                            <input type="text" class="form-control" name="projName" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Project URL</label>
+                                            <input type="url" class="form-control" name="projUrl">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Technologies Used</label>
+                                            <input type="text" class="form-control" name="projTech">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Duration</label>
+                                            <input type="text" class="form-control" name="projDuration">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Project Description</label>
+                                    <textarea class="form-control" name="projDescription" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" onclick="addProject()">
+                            <i class="fas fa-plus"></i> Add Project
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-secondary me-3" onclick="prevStep()">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button class="btn btn-primary" onclick="nextStep()">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 5: Preview & Generate -->
+                <div class="form-step" id="step5">
+                    <h2 class="text-center mb-4">Preview & Generate Portfolio</h2>
+                    
+                    <div class="preview-section">
+                        <h4 class="text-center mb-3">Portfolio Preview</h4>
+                        <div class="loading" id="loadingPreview">
+                            <div class="spinner"></div>
+                            <p>Generating your portfolio...</p>
+                        </div>
+                        <iframe id="portfolioPreview" class="preview-iframe" style="display: none;"></iframe>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary me-3" onclick="prevStep()">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button class="btn btn-success" onclick="generatePortfolio()">
+                            <i class="fas fa-magic"></i> Generate Portfolio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentStep = 1;
+        let selectedProfession = null;
+        let userData = {
+            skills: {
+                technical: [],
+                soft: [],
+                tools: []
+            },
+            experience: [],
+            education: [],
+            projects: []
+        };
+
+        // API base URL helper
+        const API_BASE = (window.location.protocol === 'file:') 
+            ? 'http://localhost:8000/api/' 
+            : new URL('api/', window.location.href).href;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Profession selection
+            document.querySelectorAll('.profession-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.profession-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedProfession = this.dataset.profession;
+                    document.getElementById('nextBtn1').disabled = false;
+                });
+            });
+
+            // Skill input enter key
+            ['techSkillInput', 'softSkillInput', 'toolSkillInput'].forEach(inputId => {
+                document.getElementById(inputId).addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const type = inputId.replace('SkillInput', '');
+                        addSkill(type);
+                    }
+                });
+            });
+        }
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < 5) {
+                    document.getElementById(`step${currentStep}`).classList.remove('active');
+                    currentStep++;
+                    document.getElementById(`step${currentStep}`).classList.add('active');
+                    updateStepIndicator();
+                    
+                    if (currentStep === 5) {
+                        generatePreview();
+                    }
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateStepIndicator();
+            }
+        }
+
+        function updateStepIndicator() {
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+        }
+
+        function validateCurrentStep() {
+            switch (currentStep) {
+                case 1:
+                    return selectedProfession !== null;
+                case 2:
+                    const requiredFields = ['fullName', 'email', 'phone'];
+                    return requiredFields.every(field => document.getElementById(field).value.trim() !== '');
+                default:
+                    return true;
+            }
+        }
+
+        function addSkill(type) {
+            const inputId = type + 'SkillInput';
+            const input = document.getElementById(inputId);
+            const skill = input.value.trim();
+            
+            if (!skill) return;
+            
+            const containerId = type + 'Skills';
+            const container = document.getElementById(containerId);
+            
+            const skillTag = document.createElement('span');
+            skillTag.className = 'skill-tag';
+            skillTag.innerHTML = `
+                ${skill}
+                <span class="remove" onclick="removeSkill(this)">×</span>
+            `;
+            
+            container.appendChild(skillTag);
+            input.value = '';
+            
+            // Add to userData
+            userData.skills[type].push(skill);
+        }
+
+        function removeSkill(element) {
+            const skillTag = element.parentElement;
+            const skillText = skillTag.textContent.replace('×', '').trim();
+            
+            // Remove from userData
+            Object.keys(userData.skills).forEach(type => {
+                const index = userData.skills[type].indexOf(skillText);
+                if (index > -1) {
+                    userData.skills[type].splice(index, 1);
+                }
+            });
+            
+            skillTag.remove();
+        }
+
+        function addExperience() {
+            const container = document.getElementById('experienceContainer');
+            const newExp = createExperienceItem();
+            container.appendChild(newExp);
+        }
+
+        function createExperienceItem() {
+            const div = document.createElement('div');
+            div.className = 'dynamic-item';
+            div.innerHTML = `
+                <button type="button" class="remove-item" onclick="removeItem(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Job Title *</label>
+                            <input type="text" class="form-control" name="expTitle" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Company *</label>
+                            <input type="text" class="form-control" name="expCompany" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Start Date</label>
+                            <input type="month" class="form-control" name="expStart">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">End Date</label>
+                            <input type="month" class="form-control" name="expEnd">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description & Achievements</label>
+                    <textarea class="form-control" name="expDescription" rows="3"></textarea>
+                </div>
+            `;
+            return div;
+        }
+
+        function addEducation() {
+            const container = document.getElementById('educationContainer');
+            const newEdu = createEducationItem();
+            container.appendChild(newEdu);
+        }
+
+        function createEducationItem() {
+            const div = document.createElement('div');
+            div.className = 'dynamic-item';
+            div.innerHTML = `
+                <button type="button" class="remove-item" onclick="removeItem(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Degree/Qualification *</label>
+                            <input type="text" class="form-control" name="eduDegree" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Institution *</label>
+                            <input type="text" class="form-control" name="eduInstitution" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Start Date</label>
+                            <input type="month" class="form-control" name="eduStart">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">End Date</label>
+                            <input type="month" class="form-control" name="eduEnd">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Grade/GPA</label>
+                            <input type="text" class="form-control" name="eduGrade">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-control" name="eduLocation">
+                </div>
+            `;
+            return div;
+        }
+
+        function addProject() {
+            const container = document.getElementById('projectsContainer');
+            const newProj = createProjectItem();
+            container.appendChild(newProj);
+        }
+
+        function createProjectItem() {
+            const div = document.createElement('div');
+            div.className = 'dynamic-item';
+            div.innerHTML = `
+                <button type="button" class="remove-item" onclick="removeItem(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Project Name *</label>
+                            <input type="text" class="form-control" name="projName" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Project URL</label>
+                            <input type="url" class="form-control" name="projUrl">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Technologies Used</label>
+                            <input type="text" class="form-control" name="projTech">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Duration</label>
+                            <input type="text" class="form-control" name="projDuration">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Project Description</label>
+                    <textarea class="form-control" name="projDescription" rows="3"></textarea>
+                </div>
+            `;
+            return div;
+        }
+
+        function removeItem(button) {
+            button.parentElement.remove();
+        }
+
+        function collectFormData() {
+            const data = {
+                profession: selectedProfession,
+                full_name: document.getElementById('fullName').value,
+                job_title: document.getElementById('jobTitle').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                location: document.getElementById('location').value,
+                website: document.getElementById('website').value,
+                summary: document.getElementById('summary').value,
+                skills: userData.skills,
+                experience: collectDynamicData('experienceContainer', ['expTitle', 'expCompany', 'expStart', 'expEnd', 'expDescription']),
+                education: collectDynamicData('educationContainer', ['eduDegree', 'eduInstitution', 'eduStart', 'eduEnd', 'eduGrade', 'eduLocation']),
+                projects: collectDynamicData('projectsContainer', ['projName', 'projUrl', 'projTech', 'projDuration', 'projDescription'])
+            };
+            return data;
+        }
+
+        function collectDynamicData(containerId, fieldNames) {
+            const container = document.getElementById(containerId);
+            const items = container.querySelectorAll('.dynamic-item');
+            const data = [];
+            
+            items.forEach(item => {
+                const itemData = {};
+                fieldNames.forEach(fieldName => {
+                    const input = item.querySelector(`[name="${fieldName}"]`);
+                    if (input) {
+                        itemData[fieldName.replace(/^(exp|edu|proj)/, '').toLowerCase()] = input.value;
+                    }
+                });
+                data.push(itemData);
+            });
+            
+            return data;
+        }
+
+        async function generatePreview() {
+            const data = collectFormData();
+            
+            document.getElementById('loadingPreview').style.display = 'block';
+            document.getElementById('portfolioPreview').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${API_BASE}generate-portfolio`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: 1, // For demo purposes
+                        ...data
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const iframe = document.getElementById('portfolioPreview');
+                    iframe.srcdoc = result.html;
+                    iframe.style.display = 'block';
+                    document.getElementById('loadingPreview').style.display = 'none';
+                } else {
+                    showAlert('Error generating preview: ' + result.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('Error generating preview: ' + error.message, 'danger');
+                document.getElementById('loadingPreview').style.display = 'none';
+            }
+        }
+
+        async function generatePortfolio() {
+            const data = collectFormData();
+            
+            try {
+                const response = await fetch(`${API_BASE}save-profile`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: 1, // For demo purposes
+                        ...data
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('Portfolio generated successfully!', 'success');
+                    // Here you could redirect to the generated portfolio or provide download link
+                } else {
+                    showAlert('Error generating portfolio: ' + result.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('Error generating portfolio: ' + error.message, 'danger');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

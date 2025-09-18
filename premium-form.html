@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Portfolio Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --dark-bg: #0f0f23;
+      --card-bg: #1a1a2e;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --text-muted: #6c6c6c;
+      --border-color: #2d2d44;
+      --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.15);
+      --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.3);
+      --border-radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Animated background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+      animation: backgroundShift 20s ease-in-out infinite;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      25% { transform: translateX(-20px) translateY(-10px); }
+      50% { transform: translateX(20px) translateY(10px); }
+      75% { transform: translateX(-10px) translateY(20px); }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .header h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-container {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-heavy);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .form-header {
+      background: var(--primary-gradient);
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .form-header h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-header p {
+      opacity: 0.9;
+      font-size: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-content {
+      padding: 3rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .section-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.2rem;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group.required label::after {
+      content: ' *';
+      color: #ff6b6b;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .file-upload {
+      position: relative;
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      transition: var(--transition);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .file-upload:hover {
+      border-color: #667eea;
+      background: rgba(102, 126, 234, 0.05);
+    }
+
+    .file-upload.dragover {
+      border-color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      transform: scale(1.02);
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-upload-content {
+      pointer-events: none;
+    }
+
+    .file-upload-icon {
+      font-size: 2rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .file-upload-text {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .photo-preview {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 12px;
+      margin-top: 1rem;
+      box-shadow: var(--shadow-medium);
+      display: none;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .skill-tag {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-light);
+    }
+
+    .skill-tag .remove {
+      cursor: pointer;
+      font-weight: bold;
+      opacity: 0.7;
+      transition: var(--transition);
+    }
+
+    .skill-tag .remove:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .skill-input-group {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-input-group input {
+      flex: 1;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-1px);
+    }
+
+    .dynamic-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .dynamic-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: #667eea;
+    }
+
+    .dynamic-item .remove-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .submit-section {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .submit-btn {
+      background: var(--success-gradient);
+      color: white;
+      padding: 1.2rem 3rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-heavy);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .form-content {
+        padding: 2rem 1.5rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .skill-input-group {
+        flex-direction: column;
+      }
+
+      .section-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .section-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Loading animation */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Success message */
+    .success-message {
+      background: var(--success-gradient);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 2rem;
+      display: none;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation"></div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>✨ Premium Portfolio Builder</h1>
+      <p>Create a stunning, professional portfolio that stands out from the crowd</p>
+    </div>
+
+    <div class="form-container">
+      <div class="form-header">
+        <h2>🚀 Let's Build Your Dream Portfolio</h2>
+        <p>Fill in your details and watch the magic happen</p>
+      </div>
+
+      <div class="form-content">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="success-message" id="successMessage">
+          <i class="fas fa-check-circle"></i> Form submitted successfully! Your portfolio is being generated...
+        </div>
+
+        <form id="portfolioForm" novalidate>
+          <!-- Personal Information -->
+          <div class="section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              <h3 class="section-title">Personal Information</h3>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group required">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" class="form-input" placeholder="Enter your full name" required>
+              </div>
+              <div class="form-group">
+                <label for="jobTitle">Professional Title</label>
+                <input type="text" id="jobTitle" name="jobTitle" class="form-input" placeholder="e.g., Full Stack Developer">
+              </div>
+              <div class="form-group required">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="your.email@example.com" required>
+              </div>
+              <div class="form-group required">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" class="form-input" placeholder="+1 (555) 123-4567" required>
+              </div>
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" class="form-input" placeholder="City, Country">
+              </div>
+              <div class="form-group">
+                <label for="website">Website/Portfolio</label>
+                <input type="url" id="website" name="website" class="form-input" placeholder="https://yourwebsite.com">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="summary">Professional Summary</label>
+              <textarea id="summary" name="summary" class="form-input form-textarea" placeholder="Tell us about yourself, your experience, and what makes you unique..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Profile Photo</label>
+              <div class="file-upload" id="photoUpload">
+                <input type="file" id="photo" name="photo" accept="image/*">
+                <div class="file-upload-content">
+                  <div class="file-upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                  </div>
+                  <div class="file-upload-text">
+                    <strong>Click to upload</strong> or drag and drop your photo here
+                  </div>
+                  <div style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.7;">
+                    PNG, JPG, GIF up to 10MB
+                  </div>
+                </div>
+              </div>
+              <img id="photoPreview" class="photo-preview" alt="Photo preview">
+            </div>
+          </div>
+
+          <!-- Skills Section -->
+          <div class="section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-code"></i>
+              </div>
+              <h3 class="section-title">Skills & Expertise</h3>
+            </div>
+
+            <div class="form-group">
+              <label>Technical Skills</label>
+              <div class="skill-input-group">
+                <input type="text" id="techSkillInput" class="form-input" placeholder="e.g., JavaScript, React, Node.js">
+                <button type="button" class="btn btn-primary" onclick="addSkill('technical')">
+                  <i class="fas fa-plus"></i> Add
+                </button>
+              </div>
+              <div id="technicalSkills" class="skill-tags"></div>
+            </div>
+
+            <div class="form-group">
+              <label>Soft Skills</label>
+              <div class="skill-input-group">
+                <input type="text" id="softSkillInput" class="form-input" placeholder="e.g., Leadership, Communication, Problem Solving">
+                <button type="button" class="btn btn-primary" onclick="addSkill('soft')">
+                  <i class="fas fa-plus"></i> Add
+                </button>
+              </div>
+              <div id="softSkills" class="skill-tags"></div>
+            </div>
+
+            <div class="form-group">
+              <label>Tools & Technologies</label>
+              <div class="skill-input-group">
+                <input type="text" id="toolSkillInput" class="form-input" placeholder="e.g., Git, Docker, AWS, Figma">
+                <button type="button" class="btn btn-primary" onclick="addSkill('tools')">
+                  <i class="fas fa-plus"></i> Add
+                </button>
+              </div>
+              <div id="toolsSkills" class="skill-tags"></div>
+            </div>
+          </div>
+
+          <!-- Experience Section -->
+          <div class="section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <h3 class="section-title">Professional Experience</h3>
+            </div>
+
+            <div id="experienceContainer">
+              <div class="dynamic-item">
+                <button type="button" class="btn btn-danger remove-btn" onclick="removeItem(this)">
+                  <i class="fas fa-times"></i>
+                </button>
+                <div class="form-grid">
+                  <div class="form-group required">
+                    <label>Job Title</label>
+                    <input type="text" name="expTitle[]" class="form-input" placeholder="e.g., Senior Developer" required>
+                  </div>
+                  <div class="form-group required">
+                    <label>Company</label>
+                    <input type="text" name="expCompany[]" class="form-input" placeholder="Company Name" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" name="expStart[]" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label>End Date</label>
+                    <input type="month" name="expEnd[]" class="form-input">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Description & Achievements</label>
+                  <textarea name="expDescription[]" class="form-input form-textarea" placeholder="Describe your role, responsibilities, and key achievements..."></textarea>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addExperience()">
+              <i class="fas fa-plus"></i> Add Experience
+            </button>
+          </div>
+
+          <!-- Education Section -->
+          <div class="section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <h3 class="section-title">Education</h3>
+            </div>
+
+            <div id="educationContainer">
+              <div class="dynamic-item">
+                <button type="button" class="btn btn-danger remove-btn" onclick="removeItem(this)">
+                  <i class="fas fa-times"></i>
+                </button>
+                <div class="form-grid">
+                  <div class="form-group required">
+                    <label>Degree/Qualification</label>
+                    <input type="text" name="eduDegree[]" class="form-input" placeholder="e.g., Bachelor of Computer Science" required>
+                  </div>
+                  <div class="form-group required">
+                    <label>Institution</label>
+                    <input type="text" name="eduInstitution[]" class="form-input" placeholder="University Name" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" name="eduStart[]" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label>End Date</label>
+                    <input type="month" name="eduEnd[]" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label>Grade/GPA</label>
+                    <input type="text" name="eduGrade[]" class="form-input" placeholder="e.g., 3.8/4.0, First Class">
+                  </div>
+                  <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="eduLocation[]" class="form-input" placeholder="City, Country">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addEducation()">
+              <i class="fas fa-plus"></i> Add Education
+            </button>
+          </div>
+
+          <!-- Projects Section -->
+          <div class="section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-project-diagram"></i>
+              </div>
+              <h3 class="section-title">Projects & Portfolio</h3>
+            </div>
+
+            <div id="projectsContainer">
+              <div class="dynamic-item">
+                <button type="button" class="btn btn-danger remove-btn" onclick="removeItem(this)">
+                  <i class="fas fa-times"></i>
+                </button>
+                <div class="form-grid">
+                  <div class="form-group required">
+                    <label>Project Name</label>
+                    <input type="text" name="projName[]" class="form-input" placeholder="e.g., E-commerce Platform" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Project URL</label>
+                    <input type="url" name="projUrl[]" class="form-input" placeholder="https://project-demo.com">
+                  </div>
+                  <div class="form-group">
+                    <label>Technologies Used</label>
+                    <input type="text" name="projTech[]" class="form-input" placeholder="React, Node.js, MongoDB">
+                  </div>
+                  <div class="form-group">
+                    <label>Duration</label>
+                    <input type="text" name="projDuration[]" class="form-input" placeholder="3 months, 2023">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Project Description</label>
+                  <textarea name="projDescription[]" class="form-input form-textarea" placeholder="Describe the project, your role, challenges faced, and results achieved..."></textarea>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addProject()">
+              <i class="fas fa-plus"></i> Add Project
+            </button>
+          </div>
+
+          <div class="submit-section">
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <i class="fas fa-magic"></i> Generate My Portfolio
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global variables
+    const API_BASE = (window.location.protocol === 'file:')
+      ? 'http://localhost:8000/api/'
+      : new URL('api/', window.location.href).href;
+
+    let skillCounters = {
+      technical: 0,
+      soft: 0,
+      tools: 0
+    };
+
+    // Initialize the form
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeForm();
+      setupFileUpload();
+      setupFormValidation();
+      updateProgress();
+    });
+
+    // Initialize form functionality
+    function initializeForm() {
+      // Add fade-in animation to sections
+      const sections = document.querySelectorAll('.section');
+      sections.forEach((section, index) => {
+        section.style.animationDelay = `${index * 0.1}s`;
+        section.classList.add('fade-in');
+      });
+
+      // Setup skill input enter key support
+      const skillInputs = ['techSkillInput', 'softSkillInput', 'toolSkillInput'];
+      skillInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            const type = inputId.replace('SkillInput', '');
+            addSkill(type);
+          }
+        });
+      });
+    }
+
+    // Setup file upload with drag and drop
+    function setupFileUpload() {
+      const fileUpload = document.getElementById('photoUpload');
+      const fileInput = document.getElementById('photo');
+      const preview = document.getElementById('photoPreview');
+
+      // Click to upload
+      fileUpload.addEventListener('click', () => fileInput.click());
+
+      // File selection
+      fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          previewFile(file);
+        }
+      });
+
+      // Drag and drop
+      fileUpload.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        fileUpload.classList.add('dragover');
+      });
+
+      fileUpload.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        fileUpload.classList.remove('dragover');
+      });
+
+      fileUpload.addEventListener('drop', function(e) {
+        e.preventDefault();
+        fileUpload.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          fileInput.files = files;
+          previewFile(files[0]);
+        }
+      });
+    }
+
+    // Preview uploaded file
+    function previewFile(file) {
+      const preview = document.getElementById('photoPreview');
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      
+      reader.readAsDataURL(file);
+      
+      // Upload file to server
+      uploadFile(file);
+    }
+
+    // Upload file to server
+    async function uploadFile(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch(`${API_BASE}upload.php`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          // Store the file URL for later use
+          document.getElementById('photo').setAttribute('data-uploaded-url', result.file_url);
+          showNotification('Photo uploaded successfully!', 'success');
+        } else {
+          showNotification('Upload failed: ' + result.message, 'error');
+        }
+      } catch (error) {
+        showNotification('Upload error: ' + error.message, 'error');
+      }
+    }
+
+    // Setup form validation
+    function setupFormValidation() {
+      const form = document.getElementById('portfolioForm');
+      const inputs = form.querySelectorAll('input[required], textarea[required]');
+
+      inputs.forEach(input => {
+        input.addEventListener('blur', validateField);
+        input.addEventListener('input', clearError);
+      });
+
+      form.addEventListener('submit', handleSubmit);
+    }
+
+    // Validate individual field
+    function validateField(e) {
+      const field = e.target;
+      const value = field.value.trim();
+      
+      clearError(e);
+      
+      if (field.hasAttribute('required') && !value) {
+        showFieldError(field, 'This field is required');
+        return false;
+      }
+      
+      if (field.type === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          showFieldError(field, 'Please enter a valid email address');
+          return false;
+        }
+      }
+      
+      if (field.type === 'url' && value) {
+        try {
+          new URL(value);
+        } catch {
+          showFieldError(field, 'Please enter a valid URL');
+          return false;
+        }
+      }
+      
+      return true;
+    }
+
+    // Show field error
+    function showFieldError(field, message) {
+      field.style.borderColor = '#ff6b6b';
+      
+      let errorDiv = field.parentNode.querySelector('.error-message');
+      if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.style.color = '#ff6b6b';
+        errorDiv.style.fontSize = '0.8rem';
+        errorDiv.style.marginTop = '0.5rem';
+        field.parentNode.appendChild(errorDiv);
+      }
+      errorDiv.textContent = message;
+    }
+
+    // Clear field error
+    function clearError(e) {
+      const field = e.target;
+      field.style.borderColor = '';
+      
+      const errorDiv = field.parentNode.querySelector('.error-message');
+      if (errorDiv) {
+        errorDiv.remove();
+      }
+    }
+
+    // Handle form submission
+    async function handleSubmit(e) {
+      e.preventDefault();
+      
+      const form = e.target;
+      const formData = new FormData(form);
+      
+      // Validate all required fields
+      const requiredFields = form.querySelectorAll('input[required], textarea[required]');
+      let isValid = true;
+      
+      requiredFields.forEach(field => {
+        if (!validateField({ target: field })) {
+          isValid = false;
+        }
+      });
+      
+      if (!isValid) {
+        showNotification('Please fill in all required fields', 'error');
+        return;
+      }
+      
+      // Show loading state
+      const submitBtn = document.getElementById('submitBtn');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="loading"></div> Generating...';
+      submitBtn.disabled = true;
+      
+      try {
+        // Collect form data
+        const userData = collectFormData();
+        
+        // Send data to API
+        const response = await fetch(`${API_BASE}save-profile`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: 1, // For demo purposes
+            ...userData
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          // Generate portfolio preview
+          const portfolioResponse = await fetch(`${API_BASE}generate-portfolio`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user_id: 1,
+              template: userData.profession || 'default'
+            })
+          });
+          
+          const portfolioResult = await portfolioResponse.json();
+          
+          if (portfolioResult.success) {
+            // Open portfolio in new window
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(portfolioResult.html);
+            newWindow.document.close();
+            
+            showSuccessMessage('Portfolio generated successfully! Check the new window.');
+          } else {
+            showNotification('Error generating portfolio: ' + portfolioResult.message, 'error');
+          }
+        } else {
+          showNotification('Error saving profile: ' + result.message, 'error');
+        }
+      } catch (error) {
+        showNotification('Error: ' + error.message, 'error');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    }
+
+    // Collect form data
+    function collectFormData() {
+      const form = document.getElementById('portfolioForm');
+      const formData = new FormData(form);
+      
+      // Collect basic info
+      const data = {
+        full_name: document.getElementById('fullName').value,
+        job_title: document.getElementById('jobTitle').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        location: document.getElementById('location').value,
+        website: document.getElementById('website').value,
+        summary: document.getElementById('summary').value,
+        profession: 'developer', // Default profession
+        profile_photo: document.getElementById('photo').getAttribute('data-uploaded-url') || ''
+      };
+      
+      // Collect skills
+      data.skills = {
+        technical: Array.from(document.querySelectorAll('#technicalSkills .skill-tag')).map(tag => ({
+          name: tag.textContent.replace('×', '').trim(),
+          type: 'technical',
+          level: 50
+        })),
+        soft: Array.from(document.querySelectorAll('#softSkills .skill-tag')).map(tag => ({
+          name: tag.textContent.replace('×', '').trim(),
+          type: 'soft',
+          level: 50
+        })),
+        tools: Array.from(document.querySelectorAll('#toolsSkills .skill-tag')).map(tag => ({
+          name: tag.textContent.replace('×', '').trim(),
+          type: 'tools',
+          level: 50
+        }))
+      };
+      
+      // Collect experience
+      data.experience = [];
+      document.querySelectorAll('#experienceContainer .dynamic-item').forEach(item => {
+        const title = item.querySelector('input[name="expTitle[]"]')?.value;
+        const company = item.querySelector('input[name="expCompany[]"]')?.value;
+        const start = item.querySelector('input[name="expStart[]"]')?.value;
+        const end = item.querySelector('input[name="expEnd[]"]')?.value;
+        const description = item.querySelector('textarea[name="expDescription[]"]')?.value;
+        
+        if (title && company) {
+          data.experience.push({
+            title: title,
+            company: company,
+            start_date: start,
+            end_date: end,
+            description: description,
+            is_current: !end
+          });
+        }
+      });
+      
+      // Collect education
+      data.education = [];
+      document.querySelectorAll('#educationContainer .dynamic-item').forEach(item => {
+        const degree = item.querySelector('input[name="eduDegree[]"]')?.value;
+        const institution = item.querySelector('input[name="eduInstitution[]"]')?.value;
+        const start = item.querySelector('input[name="eduStart[]"]')?.value;
+        const end = item.querySelector('input[name="eduEnd[]"]')?.value;
+        const grade = item.querySelector('input[name="eduGrade[]"]')?.value;
+        const location = item.querySelector('input[name="eduLocation[]"]')?.value;
+        
+        if (degree && institution) {
+          data.education.push({
+            degree: degree,
+            institution: institution,
+            start_date: start,
+            end_date: end,
+            grade: grade,
+            location: location
+          });
+        }
+      });
+      
+      // Collect projects
+      data.projects = [];
+      document.querySelectorAll('#projectsContainer .dynamic-item').forEach(item => {
+        const name = item.querySelector('input[name="projName[]"]')?.value;
+        const url = item.querySelector('input[name="projUrl[]"]')?.value;
+        const tech = item.querySelector('input[name="projTech[]"]')?.value;
+        const duration = item.querySelector('input[name="projDuration[]"]')?.value;
+        const description = item.querySelector('textarea[name="projDescription[]"]')?.value;
+        
+        if (name) {
+          data.projects.push({
+            name: name,
+            url: url,
+            technologies: tech,
+            duration: duration,
+            description: description,
+            image: ''
+          });
+        }
+      });
+      
+      return data;
+    }
+
+    // Show success message
+    function showSuccessMessage(message = 'Form submitted successfully! Your portfolio is being generated...') {
+      const successMessage = document.getElementById('successMessage');
+      successMessage.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+      successMessage.classList.add('show');
+      
+      // Hide after 5 seconds
+      setTimeout(() => {
+        successMessage.classList.remove('show');
+      }, 5000);
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'error' ? '#ff6b6b' : '#4facfe'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        z-index: 1000;
+        animation: slideInRight 0.3s ease-out;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Add skill function
+    function addSkill(type) {
+      const inputId = type + 'SkillInput';
+      const input = document.getElementById(inputId);
+      const skill = input.value.trim();
+      
+      if (!skill) return;
+      
+      const containerId = type + 'Skills';
+      const container = document.getElementById(containerId);
+      
+      const skillTag = document.createElement('div');
+      skillTag.className = 'skill-tag';
+      skillTag.innerHTML = `
+        ${skill}
+        <span class="remove" onclick="removeSkill(this)">×</span>
+      `;
+      
+      container.appendChild(skillTag);
+      input.value = '';
+      
+      // Add animation
+      skillTag.style.animation = 'fadeInUp 0.3s ease-out';
+    }
+
+    // Remove skill function
+    function removeSkill(element) {
+      element.parentElement.style.animation = 'fadeOut 0.3s ease-out';
+      setTimeout(() => element.parentElement.remove(), 300);
+    }
+
+    // Add experience function
+    function addExperience() {
+      const container = document.getElementById('experienceContainer');
+      const newExp = createExperienceItem();
+      container.appendChild(newExp);
+      updateProgress();
+    }
+
+    // Create experience item
+    function createExperienceItem() {
+      const div = document.createElement('div');
+      div.className = 'dynamic-item fade-in';
+      div.innerHTML = `
+        <button type="button" class="btn btn-danger remove-btn" onclick="removeItem(this)">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="form-grid">
+          <div class="form-group required">
+            <label>Job Title</label>
+            <input type="text" name="expTitle[]" class="form-input" placeholder="e.g., Senior Developer" required>
+          </div>
+          <div class="form-group required">
+            <label>Company</label>
+            <input type="text" name="expCompany[]" class="form-input" placeholder="Company Name" required>
+          </div>
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="month" name="expStart[]" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="month" name="expEnd[]" class="form-input">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description & Achievements</label>
+          <textarea name="expDescription[]" class="form-input form-textarea" placeholder="Describe your role, responsibilities, and key achievements..."></textarea>
+        </div>
+      `;
+      return div;
+    }
+
+    // Add education function
+    function addEducation() {
+      const container = document.getElementById('educationContainer');
+      const newEdu = createEducationItem();
+      container.appendChild(newEdu);
+      updateProgress();
+    }
+
+    // Create education item
+    function createEducationItem() {
+      const div = document.createElement('div');
+      div.className = 'dynamic-item fade-in';
+      div.innerHTML = `
+        <button type="button" class="btn btn-danger remove-btn" onclick="removeItem(this)">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="form-grid">
+          <div class="form-group required">
+            <label>Degree/Qualification</label>
+            <input type="text" name="eduDegree[]" class="form-input" placeholder="e.g., Bachelor of Computer Science" required>
+          </div>
+          <div class="form-group required">
+            <label>Institution</label>
+            <input type="text" name="eduInstitution[]" class="form-input" placeholder="University Name" required>
+          </div>
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="month" name="eduStart[]" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="month" name="eduEnd[]" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Grade/GPA</label>
+            <input type="text" name="eduGrade[]" class="form-input" placeholder="e.g., 3.8/4.0, First Class">
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" name="eduLocation[]" class="form-input" placeholder="City, Country">
+          </div>
+        </div>
+      `;
+      return div;
+    }
+
+    // Add project function
+    function addProject() {
+      const container = document.getElementById('projectsContainer');
+      const newProj = createProjectItem();
+      container.appendChild(newProj);
+      updateProgress();
+    }
+
+    // Create project item
+    function createProjectItem() {
+      const div = document.createElement('div');
+      div.className = 'dynamic-item fade-in';
+      div.innerHTML = `
+        <button type="button" class="btn btn-danger remove-btn" onclick="removeItem(this)">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="form-grid">
+          <div class="form-group required">
+            <label>Project Name</label>
+            <input type="text" name="projName[]" class="form-input" placeholder="e.g., E-commerce Platform" required>
+          </div>
+          <div class="form-group">
+            <label>Project URL</label>
+            <input type="url" name="projUrl[]" class="form-input" placeholder="https://project-demo.com">
+          </div>
+          <div class="form-group">
+            <label>Technologies Used</label>
+            <input type="text" name="projTech[]" class="form-input" placeholder="React, Node.js, MongoDB">
+          </div>
+          <div class="form-group">
+            <label>Duration</label>
+            <input type="text" name="projDuration[]" class="form-input" placeholder="3 months, 2023">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Project Description</label>
+          <textarea name="projDescription[]" class="form-input form-textarea" placeholder="Describe the project, your role, challenges faced, and results achieved..."></textarea>
+        </div>
+      `;
+      return div;
+    }
+
+    // Remove item function
+    function removeItem(button) {
+      const item = button.parentElement;
+      item.style.animation = 'fadeOut 0.3s ease-out';
+      setTimeout(() => {
+        item.remove();
+        updateProgress();
+      }, 300);
+    }
+
+    // Update progress bar
+    function updateProgress() {
+      const form = document.getElementById('portfolioForm');
+      const requiredFields = form.querySelectorAll('input[required], textarea[required]');
+      const filledFields = Array.from(requiredFields).filter(field => field.value.trim() !== '');
+      
+      const progress = (filledFields.length / requiredFields.length) * 100;
+      const progressFill = document.getElementById('progressFill');
+      progressFill.style.width = `${Math.min(progress, 100)}%`;
+    }
+
+    // Add CSS for animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      
+      @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+      
+      @keyframes fadeOut {
+        from { opacity: 1; transform: scale(1); }
+        to { opacity: 0; transform: scale(0.8); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Add event listeners for progress tracking
+    document.addEventListener('input', updateProgress);
+  </script>
+</body>
+</html>

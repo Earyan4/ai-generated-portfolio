@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aryan Goud — Cinematic Videographer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07080b;
+      --panel: rgba(255,255,255,0.03);
+      --muted: #9aa3b2;
+      --text: #e9f0f6;
+      --accent: #6be7d7;
+      --accent-2: #5aa8ff;
+      --radius:16px;
+      --max-w:1200px;
+      --ease: cubic-bezier(.2,.9,.2,1);
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); scroll-behavior:smooth;}
+    body{display:flex;flex-direction:column;align-items:center;padding:32px 18px;}
+
+    .wrap{width:100%;max-width:var(--max-w);}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 6px;position:sticky;top:0;background:var(--bg);z-index:100;}
+    .brand{display:flex;align-items:center;gap:14px;}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-weight:800;color:#021018;}
+    .brand h1{font-size:16px;margin:0;}
+    .brand p{margin:0;color:var(--muted);font-size:12px;}
+    nav{display:flex;gap:12px;align-items:center;}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:12px;font-weight:600;}
+    nav a:hover{color:var(--text);background:var(--panel);}
+
+    section{margin:60px 0; width:100%;}
+    h2{font-size:clamp(28px,4.4vw,48px);line-height:1.1;font-weight:800;margin-bottom:12px;}
+    h3{margin:0 0 12px;font-size:22px;}
+    p{color:var(--muted);line-height:1.6;}
+
+    /* Hero */
+    .hero{position:relative;height:72vh;border-radius:20px;overflow:hidden;display:flex;align-items:center;justify-content:flex-start;box-shadow:0 10px 50px rgba(2,6,23,0.7);}
+    .hero video.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.45) contrast(1.05);}
+    .hero .overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.0) 0%, rgba(2,6,23,0.45) 60%)}
+    .hero-content{position:relative;z-index:6;padding:48px;max-width:920px;display:flex;flex-direction:column;gap:18px;}
+    .eyebrow{display:inline-block;background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:999px;color:var(--muted);font-weight:600;font-size:13px;}
+    .title{font-size:clamp(28px,4.4vw,56px);line-height:1.1;font-weight:800;letter-spacing:-0.02em;}
+    .lead{max-width:70%;font-size:16px;}
+    .actions{display:flex;gap:12px;margin-top:8px;}
+    .btn{border-radius:12px;padding:12px 18px;font-weight:700;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:10px;}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021018;}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);}
+
+    /* Projects */
+    .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .project{position:relative;border-radius:12px;overflow:hidden;cursor:pointer;background:#000;}
+    .project img{width:100%;height:200px;object-fit:cover;transition:transform 450ms var(--ease);}
+    .project .meta{position:absolute;left:14px;bottom:14px;background:linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.25));padding:8px 12px;border-radius:10px;}
+    .project:hover img{transform:scale(1.04);}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.7);z-index:2000;}
+    .modal.open{display:flex;}
+    .modal .box{width:min(1100px,96%);height:min(76vh,720px);background:#000;border-radius:12px;padding:8px;position:relative;}
+    .modal video{width:100%;height:100%;object-fit:contain;}
+    #modalClose{position:absolute;right:18px;top:18px;background:rgba(255,255,255,0.03);border:none;padding:8px;border-radius:8px;color:var(--text);cursor:pointer;}
+
+    footer{text-align:center;color:var(--muted);margin:40px 0 0;font-size:13px;}
+
+    @media (max-width:980px){
+      .projects-grid{grid-template-columns:repeat(2,1fr);}
+      .hero{height:66vh;}
+      .hero-content .lead{max-width:100%;}
+    }
+    @media (max-width:560px){
+      .projects-grid{grid-template-columns:1fr;}
+      body{padding:18px;}
+      .hero{height:62vh;}
+      .hero-content{padding:20px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="logo">AG</div>
+        <div>
+          <h1>Aryan Goud</h1>
+          <p>cinematic videographer</p>
+        </div>
+      </div>
+      <nav aria-label="Primary navigation">
+        <a href="#hero">Home</a>
+        <a href="#showreel">Showreel</a>
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#equipment">Equipment</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+      <video class="bg" autoplay muted loop playsinline preload="metadata" poster="assets/hero-poster.jpg">
+        <source src="assets/bg-hero.mp4" type="video/mp4">
+      </video>
+      <div class="overlay"></div>
+      <div class="hero-content">
+        <div class="eyebrow">Cinematic · Brand · Events</div>
+        <h2 class="title">Crafting Minimalist, Cinematic Stories — Frame by Frame.</h2>
+        <p class="lead">I’m <strong>Aryan Goud</strong>. I create cinematic showreels and brand films with a focus on calm, intentional storytelling and visual clarity. Available for commissions worldwide.</p>
+        <div class="actions">
+          <button class="btn primary" id="playShowreel">▶ Watch Showreel</button>
+          <a class="btn ghost" href="#contact">Hire Me</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Showreel Section -->
+    <section id="showreel">
+      <h2>Showreel</h2>
+      <video id="mainReel" controls playsinline poster="assets/showreel-thumb.jpg" style="width:100%;border-radius:16px;">
+        <source src="assets/showreel.mp4" type="video/mp4">
+      </video>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2>Featured Projects</h2>
+      <div class="projects-grid">
+        <div class="project" tabindex="0" data-video="assets/video1.mp4">
+          <img src="assets/thumb1.jpg" alt="Wedding highlights - couple">
+          <div class="meta">Wedding — Reception highlights</div>
+        </div>
+        <div class="project" tabindex="0" data-video="assets/video2.mp4">
+          <img src="assets/thumb2.jpg" alt="Brand film — coffee">
+          <div class="meta">Brand Film — Coffee</div>
+        </div>
+        <div class="project" tabindex="0" data-video="assets/video3.mp4">
+          <img src="assets/thumb3.jpg" alt="Documentary — fishermen">
+          <div class="meta">Documentary — Fishermen</div>
+        </div>
+        <div class="project" tabindex="0" data-video="assets/video4.mp4">
+          <img src="assets/thumb4.jpg" alt="Commercial — sneakers">
+          <div class="meta">Commercial — Sneakers</div>
+        </div>
+        <div class="project" tabindex="0" data-video="assets/video5.mp4">
+          <img src="assets/thumb5.jpg" alt="Short film — city nights">
+          <div class="meta">Short Film — City Nights</div>
+        </div>
+        <div class="project" tabindex="0" data-video="assets/video6.mp4">
+          <img src="assets/thumb6.jpg" alt="Documentary — market">
+          <div class="meta">Documentary — Market</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+      <h2>About</h2>
+      <p>I blend minimalist composition with cinematic pacing. I craft films that are intentionally paced — focusing on light, texture, and authentic moments.</p>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+      <h2>Services</h2>
+      <p>Showreels · Brand Films · Event Coverage · Short Films · Editing & Color Grading</p>
+    </section>
+
+    <!-- Equipment Section -->
+    <section id="equipment">
+      <h2>Equipment</h2>
+      <p>Mirrorless Cinema Cameras · Gimbals · Primes · LUT-based color workflow</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>📧 <a href="mailto:aryan@videography.com" style="color:var(--accent);text-decoration:none;">aryan@videography.com</a></p>
+      <p>📞 +91 99999 99999</p>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <a href="#" style="padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.02);text-decoration:none;color:var(--muted)">Instagram</a>
+        <a href="#" style="padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.02);text-decoration:none;color:var(--muted)">Vimeo</a>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+      <div class="box">
+        <button id="modalClose">✕</button>
+        <video id="modalVideo" controls playsinline></video>
+      </div>
+    </div>
+
+    <footer>© <span id="year"></span> Aryan Goud — Minimalist Cinematic • All rights reserved</footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Project modal
+    const projects = document.querySelectorAll('.project');
+    const modal = document.getElementById('modal');
+    const modalVideo = document.getElementById('modalVideo');
+    const modalClose = document.getElementById('modalClose');
+
+    function openModal(src){
+      document.querySelector('.hero video.bg')?.pause();
+      modalVideo.src = src; modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+      modalVideo.play().catch(()=>{}); document.body.style.overflow='hidden';
+    }
+    function closeModal(){ 
+      document.querySelector('.hero video.bg')?.play();
+      modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); modalVideo.pause(); modalVideo.src=''; document.body.style.overflow=''; 
+    }
+
+    projects.forEach(p=>{
+      p.addEventListener('click', ()=> openModal(p.dataset.video));
+      p.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') openModal(p.dataset.video); });
+    });
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+    // Play showreel button
+    document.getElementById('playShowreel').addEventListener('click', ()=>{
+      const main = document.getElementById('mainReel');
+      main.scrollIntoView({behavior:'smooth',block:'center'});
+      main.play().catch(()=>{});
+    });
+  </script>
+</body>
+</html>

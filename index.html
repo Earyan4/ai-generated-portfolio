@@ -1,317 +1,369 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Portfolio Builder</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --dark-bg: #0f0f23;
-            --card-bg: #1a1a2e;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --border-color: #2d2d44;
-            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.3);
-            --border-radius: 16px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Studio Lumière — Professional Videography</title>
+  <meta name="description" content="Cinematic videography for weddings, brands, and events. Serving clients worldwide." />
+  <meta name="keywords" content="videography, cinematography, wedding films, commercial video, drone" />
+  <meta name="theme-color" content="#0b0d10" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <!-- Open Graph -->
+  <meta property="og:title" content="Studio Lumière — Professional Videography" />
+  <meta property="og:description" content="Cinematic videography for weddings, brands, and events." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourdomain.com/" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200&auto=format&fit=crop&q=80" />
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--dark-bg);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Studio Lumière — Professional Videography" />
+  <meta name="twitter:description" content="Cinematic videography for weddings, brands, and events." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200&auto=format&fit=crop&q=80" />
 
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-            animation: backgroundShift 20s ease-in-out infinite;
-        }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
 
-        @keyframes backgroundShift {
-            0%, 100% { transform: translateX(0) translateY(0); }
-            25% { transform: translateX(-20px) translateY(-10px); }
-            50% { transform: translateX(20px) translateY(10px); }
-            75% { transform: translateX(-10px) translateY(20px); }
-        }
+  <link rel="preload" as="image" href="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600&auto=format&fit=crop&q=80" />
+  <link rel="stylesheet" href="styles.css" />
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .logo {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-
-        .subtitle {
-            font-size: 1.3rem;
-            color: var(--text-secondary);
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .feature-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
-            padding: 2rem;
-            backdrop-filter: blur(20px);
-            transition: var(--transition);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-heavy);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .feature-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-description {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .cta-section {
-            margin-top: 3rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            margin: 0.5rem;
-        }
-
-        .btn-primary {
-            background: var(--primary-gradient);
-            color: white;
-            box-shadow: var(--shadow-heavy);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin: 3rem 0;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: var(--success-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
-
-            .stats {
-                gap: 2rem;
-            }
-
-            .btn {
-                display: block;
-                width: 100%;
-                margin: 0.5rem 0;
-            }
-        }
-    </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Studio Lumière",
+    "url": "https://yourdomain.com/",
+    "logo": "https://yourdomain.com/assets/favicon.svg",
+    "sameAs": [
+      "https://instagram.com/yourstudio",
+      "https://vimeo.com/yourstudio"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "Showreel — Studio Lumière",
+    "description": "A selection of our cinematic videography work across weddings, brands, and events.",
+    "thumbnailUrl": [
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&auto=format&fit=crop&q=80"
+    ],
+    "uploadDate": "2025-01-01",
+    "contentUrl": "https://player.vimeo.com/video/76979871",
+    "embedUrl": "https://player.vimeo.com/video/76979871",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Studio Lumière"
+    }
+  }
+  </script>
 </head>
 <body>
-    <div class="bg-animation"></div>
-    
-    <div class="container">
-        <div class="logo">🎨</div>
-        <h1>Professional Portfolio Builder</h1>
-        <p class="subtitle">Create stunning, professional portfolios in minutes. Perfect for developers, designers, doctors, photographers, and any professional looking to showcase their work.</p>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-title">Quick & Easy</div>
-                <div class="feature-description">Fill out a simple form and get a complete portfolio instantly</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎨</div>
-                <div class="feature-title">Multiple Templates</div>
-                <div class="feature-description">Choose from templates designed for different professions</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <div class="feature-title">Responsive Design</div>
-                <div class="feature-description">All portfolios look great on any device</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔧</div>
-                <div class="feature-title">Easy Customization</div>
-                <div class="feature-description">Customize colors, layouts, and content to match your style</div>
-            </div>
-        </div>
-
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-number">8+</div>
-                <div class="stat-label">Professions</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">Free</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">5min</div>
-                <div class="stat-label">Setup Time</div>
-            </div>
-        </div>
-
-        <div class="cta-section">
-            <a href="premium-form.html" class="btn btn-primary">
-                <i class="fas fa-magic"></i> Create My Portfolio
-            </a>
-            <a href="portfolio-viewer.html" class="btn btn-secondary">
-                <i class="fas fa-eye"></i> View Portfolios
-            </a>
-        </div>
+  <header class="site-header" data-header>
+    <div class="container header-inner">
+      <a href="#home" class="brand" aria-label="Studio Lumière home">
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 7a3 3 0 0 1 3-3h5l2 2h2a2 2 0 0 1 2 2v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7z" opacity=".35"/><path fill="currentColor" d="M12 17.5a4.5 4.5 0 1 0 0-9a4.5 4.5 0 0 0 0 9m0-2.25a2.25 2.25 0 1 1 0-4.5a2.25 2.25 0 0 1 0 4.5"/></svg>
+        <span>Studio Lumière</span>
+      </a>
+      <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Toggle navigation" data-nav-toggle>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
+  </header>
 
-    <script>
-        // Add some interactive animations
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.feature-card');
-            
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.style.animation = 'fadeInUp 0.6s ease-out forwards';
-            });
-        });
+  <main id="main">
+    <!-- Hero -->
+    <section id="home" class="hero">
+      <div class="hero-media" role="img" aria-label="Cinematic camera close-up"></div>
+      <div class="container hero-content">
+        <p class="eyebrow">Award‑winning Cinematic Videography</p>
+        <h1>Stories that move your audience</h1>
+        <p class="lead">We craft timeless wedding films and high‑impact brand stories with a cinematic touch.</p>
+        <div class="actions">
+          <button class="btn btn-primary" data-lightbox-video="https://player.vimeo.com/video/76979871?autoplay=1" aria-haspopup="dialog">Watch showreel</button>
+          <a class="btn btn-secondary" href="#contact">Book a shoot</a>
+        </div>
+        <ul class="hero-stats" aria-label="Highlights">
+          <li><strong>250+</strong> projects</li>
+          <li><strong>40</strong> brands</li>
+          <li><strong>12</strong> countries</li>
+        </ul>
+      </div>
+    </section>
 
-        // Add CSS for animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+    <!-- Services -->
+    <section id="services" class="section">
+      <div class="container">
+        <header class="section-header">
+          <h2>Services</h2>
+          <p>From concept to cut — end‑to‑end production for your story.</p>
+        </header>
+        <div class="cards services-grid">
+          <article class="card">
+            <div class="card-icon">🎬</div>
+            <h3>Commercial & Brand</h3>
+            <p>Product launches, brand films, and social campaigns that drive measurable impact.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">💍</div>
+            <h3>Weddings</h3>
+            <p>Intimate, cinematic wedding films that feel timeless and true to you.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🚁</div>
+            <h3>Drone & Aerial</h3>
+            <p>Licensed aerial cinematography for breathtaking perspectives and establishing shots.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🎙️</div>
+            <h3>Interviews & Events</h3>
+            <p>Crisp audio, flattering light, and editorial polish for talks and live events.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="portfolio" class="section">
+      <div class="container">
+        <header class="section-header">
+          <h2>Portfolio</h2>
+          <p>Selected work across categories. Use filters to explore.</p>
+        </header>
+
+        <div class="filters" role="tablist" aria-label="Portfolio filters">
+          <button class="filter is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+          <button class="filter" data-filter="wedding" role="tab">Weddings</button>
+          <button class="filter" data-filter="brand" role="tab">Brand</button>
+          <button class="filter" data-filter="event" role="tab">Events</button>
+          <button class="filter" data-filter="drone" role="tab">Drone</button>
+        </div>
+
+        <div class="portfolio-grid" data-portfolio-grid>
+          <!-- Items -->
+          <figure class="tile" data-category="brand">
+            <img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?w=800&auto=format&fit=crop&q=80" alt="Sneaker on set, commercial product close-up" loading="lazy" />
+            <figcaption>
+              <div>
+                <h3>Launch — Alt Sneaker</h3>
+                <p>Commercial / Product</p>
+                <button class="tile-cta" data-lightbox-video="https://player.vimeo.com/video/357274789?autoplay=1" aria-label="Play video: Launch — Alt Sneaker">Play</button>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="tile" data-category="wedding">
+            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80" alt="Bride and groom holding hands at golden hour" loading="lazy" />
+            <figcaption>
+              <div>
+                <h3>Elena & Marco</h3>
+                <p>Wedding / Destination</p>
+                <button class="tile-cta" data-lightbox-video="https://player.vimeo.com/video/238902809?autoplay=1" aria-label="Play video: Elena and Marco Wedding">Play</button>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="tile" data-category="event">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&auto=format&fit=crop&q=80" alt="Speaker on stage at tech conference" loading="lazy" />
+            <figcaption>
+              <div>
+                <h3>Beyond Tech Summit</h3>
+                <p>Event / Keynotes</p>
+                <button class="tile-cta" data-lightbox-video="https://player.vimeo.com/video/76979871?autoplay=1" aria-label="Play video: Beyond Tech Summit">Play</button>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="tile" data-category="drone">
+            <img src="https://images.unsplash.com/photo-1514944152558-4f5a32f0cfb4?w=800&auto=format&fit=crop&q=80" alt="Aerial view of coastline captured by drone" loading="lazy" />
+            <figcaption>
+              <div>
+                <h3>Coastal Lines</h3>
+                <p>Drone / Nature</p>
+                <button class="tile-cta" data-lightbox-video="https://player.vimeo.com/video/967062396?autoplay=1" aria-label="Play video: Coastal Lines">Play</button>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="tile" data-category="brand">
+            <img src="https://images.unsplash.com/photo-1515165562835-c4c56e48ebf8?w=800&auto=format&fit=crop&q=80" alt="Barista pouring milk into coffee cup in cafe" loading="lazy" />
+            <figcaption>
+              <div>
+                <h3>Origin Coffee</h3>
+                <p>Brand / Story</p>
+                <button class="tile-cta" data-lightbox-video="https://player.vimeo.com/video/39592630?autoplay=1" aria-label="Play video: Origin Coffee">Play</button>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="tile" data-category="wedding">
+            <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&auto=format&fit=crop&q=80" alt="Ring exchange close-up during wedding ceremony" loading="lazy" />
+            <figcaption>
+              <div>
+                <h3>Amara & Theo</h3>
+                <p>Wedding / Classic</p>
+                <button class="tile-cta" data-lightbox-video="https://player.vimeo.com/video/14013185?autoplay=1" aria-label="Play video: Amara and Theo Wedding">Play</button>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="tile" data-category="event">
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80" alt="DJ and crowd at a music festival at night" loading="lazy" />
+            <figcaption>
+              <div>
+                <h3>Solstice Festival</h3>
+                <p>Event / Music</p>
+                <button class="tile-cta" data-lightbox-video="https://player.vimeo.com/video/1084537?autoplay=1" aria-label="Play video: Solstice Festival">Play</button>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="tile" data-category="drone">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&auto=format&fit=crop&q=80" alt="Drone shot over mountain range at sunrise" loading="lazy" />
+            <figcaption>
+              <div>
+                <h3>Alpine Dawn</h3>
+                <p>Drone / Landscape</p>
+                <button class="tile-cta" data-lightbox-video="https://player.vimeo.com/video/148751763?autoplay=1" aria-label="Play video: Alpine Dawn">Play</button>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section section-alt">
+      <div class="container two-col">
+        <div>
+          <header class="section-header">
+            <h2>About the studio</h2>
+            <p>We’re a small team of directors, cinematographers, and editors crafting films with soul.</p>
+          </header>
+          <p>From intimate weddings to international brand launches, we bring a cinematic eye and editorial discipline to every project. We obsess over light, color, and sound so your story lands with clarity and emotion.</p>
+          <ul class="list-check">
+            <li>Full‑service production: concept → delivery</li>
+            <li>Dual‑system audio and color‑managed workflow</li>
+            <li>Licensed drone operations (A2 CofC)</li>
+          </ul>
+        </div>
+        <div class="about-media" role="img" aria-label="Filmmaker adjusting cinema camera rig"></div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="section">
+      <div class="container">
+        <header class="section-header">
+          <h2>Client words</h2>
+          <p>Trusted by couples, creators, and companies.</p>
+        </header>
+        <div class="cards testimonials">
+          <figure class="quote">
+            <blockquote>They captured our day with such elegance. We still cry watching it back.</blockquote>
+            <figcaption>— Sofia & Daniel</figcaption>
+          </figure>
+          <figure class="quote">
+            <blockquote>On time, on brief, and beyond expectations. The launch film moved the needle.</blockquote>
+            <figcaption>— Maya Chen, Brand Lead</figcaption>
+          </figure>
+          <figure class="quote">
+            <blockquote>Professional, agile, and creative. They handled our conference with ease.</blockquote>
+            <figcaption>— Events at NorthStar</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section section-alt">
+      <div class="container two-col contact">
+        <div>
+          <header class="section-header">
+            <h2>Tell us about your project</h2>
+            <p>We’ll reply within one business day.</p>
+          </header>
+          <ul class="contact-details">
+            <li><strong>Email</strong> <a href="mailto:studio@yourdomain.com">studio@yourdomain.com</a></li>
+            <li><strong>Instagram</strong> <a href="https://instagram.com/yourstudio" target="_blank" rel="noopener">@yourstudio</a></li>
+            <li><strong>Vimeo</strong> <a href="https://vimeo.com/yourstudio" target="_blank" rel="noopener">vimeo.com/yourstudio</a></li>
+          </ul>
+        </div>
+        <form class="contact-form" aria-describedby="form-status" data-contact-form>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required />
+          </div>
+          <div class="field">
+            <label for="budget">Budget (USD)</label>
+            <select id="budget" name="budget" required>
+              <option value="" selected disabled>Select a range</option>
+              <option value="<3000">Under $3,000</option>
+              <option value="3000-8000">$3,000 – $8,000</option>
+              <option value=">8000">$8,000+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="message">Project details</label>
+            <textarea id="message" name="message" rows="5" required placeholder="What are you looking to create? Timeline? Links?"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Send inquiry</button>
+            <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand small" href="#home">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 7a3 3 0 0 1 3-3h5l2 2h2a2 2 0 0 1 2 2v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7z" opacity=".35"/><path fill="currentColor" d="M12 17.5a4.5 4.5 0 1 0 0-9a4.5 4.5 0 0 0 0 9m0-2.25a2.25 2.25 0 1 1 0-4.5a2.25 2.25 0 0 1 0 4.5"/></svg>
+        <span>Studio Lumière</span>
+      </a>
+      <p>© <span data-year></span> Studio Lumière. All rights reserved.</p>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Lightbox Dialog -->
+  <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-labelledby="lightbox-title" hidden>
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <div class="lightbox-dialog" role="document">
+      <button class="lightbox-close" type="button" aria-label="Close video" data-lightbox-close>&times;</button>
+      <h2 id="lightbox-title" class="sr-only">Video player</h2>
+      <div class="lightbox-content" data-lightbox-content></div>
+    </div>
+  </div>
+
+  <script defer src="script.js"></script>
 </body>
 </html>
-
